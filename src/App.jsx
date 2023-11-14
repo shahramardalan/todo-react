@@ -23,22 +23,33 @@ function App() {
     const newList = [...list];
     newList.splice(index, 1);
     setList(newList);
-    console.log(list);
+    console.log(newList);
+  };
+
+  const toggleTask = (index) => {
+    const newList = [...list];
+    if (newList[index].status == list[index].status) {
+      newList[index].status = !list[index].status;
+      setList(newList);
+      console.log(newList);
+    }
   };
 
   return (
     <div>
       <div className="App">
         <TodoForm addTask={addTask} />
+
+        {list.map((todo, index) => (
+          <Todo
+            key={index}
+            title={todo.title}
+            status={todo.status}
+            deleteTask={() => deleteTask(index)}
+            toggleTask={() => toggleTask(index)}
+          />
+        ))}
       </div>
-      {list.map((todo, index) => (
-        <Todo
-          key={index}
-          title={todo.title}
-          status={todo.status}
-          deleteTask={() => deleteTask(index)}
-        />
-      ))}
     </div>
   );
 }
