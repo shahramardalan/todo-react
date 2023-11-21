@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import TodoForm from "./components/TodoForm";
 import Todo from "./components/Todo";
+import Action from "./components/Action";
 
 function uuidv4() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -13,6 +14,15 @@ function uuidv4() {
 
 function App() {
   const [list, setList] = useState([]);
+  const [filteredList, setFilteredList] = useState("");
+  const [flag, setFlag] = useState(true);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/todos")
+      .then((response) => response.json())
+      .then((data) => setList(data))
+      .then(() => setFlag(false));
+  }, []);
 
   const addTask = (value) => {
     const newList = [...list, { id: uuidv4(), title: value, status: false }];
@@ -23,7 +33,6 @@ function App() {
     const newList = list.filter((todo) => {
       return todo.id !== id;
     });
-    console.log(newList)
     setList(newList);
   };
 
@@ -36,11 +45,21 @@ function App() {
     setList(newList);
   };
 
+  const handleFilteredList = () => {};
+
   return (
     <div>
       <div className="App">
         <TodoForm addTask={addTask} />
-
+        <Action
+          filteredList={filteredList}
+          handleFilteredList={setFilteredList}
+        />
+        <br />
+        <span style={{ color: "red", display: flag ? "block" : "none" }}>
+          Loading...
+        </span>
+        <br />
         {list.map((todo) => (
           <Todo
             key={todo.id}
