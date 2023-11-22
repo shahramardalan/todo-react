@@ -27,8 +27,7 @@ function App() {
       .then(() => setFlag(false))
       .catch((e) => {
         setError(true);
-        setFlag(false)
-
+        setFlag(false);
       });
   }, []);
 
