@@ -16,12 +16,20 @@ function App() {
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState("");
   const [flag, setFlag] = useState(true);
+  const [hasError, setError] = useState(false);
 
   useEffect(() => {
+    setFlag(true);
+    setError(false);
     fetch("https://jsonplaceholder.typicode.com/todos")
       .then((response) => response.json())
       .then((data) => setList(data))
-      .then(() => setFlag(false));
+      .then(() => setFlag(false))
+      .catch((e) => {
+        setError(true);
+        setFlag(false)
+
+      });
   }, []);
 
   const addTask = (value) => {
@@ -56,6 +64,9 @@ function App() {
           handleFilteredList={setFilteredList}
         />
         <br />
+        <span style={{ color: "red", display: hasError ? "block" : "none" }}>
+          error........
+        </span>
         <span style={{ color: "red", display: flag ? "block" : "none" }}>
           Loading...
         </span>
